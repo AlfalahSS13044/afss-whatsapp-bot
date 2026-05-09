@@ -1,5 +1,6 @@
 const { default: makeWASocket, DisconnectReason, useMultiFileAuthState } = require('@whiskeysockets/baileys');
 const { Boom } = require('@hapi/boom');
+const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const path = require('path');
 
@@ -317,7 +318,6 @@ async function startBot() {
 
   const sock = makeWASocket({
     auth: state,
-    printQRInTerminal: true,
     logger: require('pino')({ level: 'silent' })
   });
 
@@ -328,9 +328,10 @@ async function startBot() {
 
     if (qr) {
       console.log('\n══════════════════════════════');
-      console.log('📱 QR CODE اسکین کریں:');
-      console.log('WhatsApp کھولیں → Linked Devices → Link a Device');
+      console.log('📱 نیچے QR CODE اسکین کریں:');
+      console.log('WhatsApp کھولیں ← Linked Devices ← Link a Device');
       console.log('══════════════════════════════\n');
+      qrcode.generate(qr, { small: true });
     }
 
     if (connection === 'close') {
